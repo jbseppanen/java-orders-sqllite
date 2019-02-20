@@ -18,7 +18,7 @@ public class Agents {
     private double commission;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "agent")
-    private Set<Customer> customers;
+    private Set<Customers> customers;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "agent")
     private Set<Orders> orders;

@@ -1,9 +1,8 @@
 package com.lambdaschool.javaorders;
 
-import com.lambdaschool.javaorders.models.Customer;
 import com.lambdaschool.javaorders.models.Orders;
 import com.lambdaschool.javaorders.repository.AgentsRepository;
-import com.lambdaschool.javaorders.repository.CustomerRepository;
+import com.lambdaschool.javaorders.repository.CustomersRepository;
 import com.lambdaschool.javaorders.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,7 +18,7 @@ public class OrderController {
     AgentsRepository agentRepo;
 
     @Autowired
-    CustomerRepository custRepo;
+    CustomersRepository custRepo;
 
     @Autowired
     OrdersRepository orderRepo;
@@ -31,12 +30,12 @@ public class OrderController {
 
     @GetMapping("/customer/name/{custname}")
     public List<Orders> getOrdersByCustName(@PathVariable String custname) {
-        return orderRepo.findByCustomer_CustnameIgnoreCase(custname);
+        return orderRepo.findByCustomers_CustnameIgnoreCase(custname);
     }
 
     @GetMapping("/customer/order/{custcode}")
     public List<Orders> getOrdersByCustCode(@PathVariable long custcode) {
-        return orderRepo.findByCustomer_Custcode(custcode);
+        return orderRepo.findByCustomers_Custcode(custcode);
     }
 
     @GetMapping("/agents")
@@ -55,7 +54,7 @@ public class OrderController {
     }
 
 /*    @GetMapping("/customers")
-    public List<Customer> allCustomers() {
+    public List<Customers> allCustomers() {
         return custRepo.findAll();
     }
 

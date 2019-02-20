@@ -8,8 +8,8 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "customers")
+public class Customers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long custcode;
@@ -25,10 +25,10 @@ public class Customer {
     @JsonIgnore
     private Agents agent;
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customer")
-//    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customers")
+    @JsonIgnore
     private Set<Orders> orders;
 
-    public Customer() {
+    public Customers() {
     }
 }

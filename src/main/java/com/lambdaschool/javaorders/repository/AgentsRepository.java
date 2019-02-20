@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface AgentsRepository extends JpaRepository<Agents, Long> {
 
-    @Query(value = "SELECT a.agentcode, a.agentname, a.workingarea as agentarea, a.commission, a.phone as agentphone, a.country,  c.custcode, c.custname, c.custcity, c.workingarea as customerarea, c.custcountry, c.grade, c.openingamt, c.receiveamt, c.paymentamt, c.outstandingamt, c.phone as customerphone FROM customer c, agents a WHERE c.agentcode=a.agentcode ORDER BY a.agentname", nativeQuery = true)
+    @Query(value = "SELECT a.agentcode, a.agentname, a.workingarea as agentarea, a.commission, a.phone as agentphone, a.country,  c.custcode, c.custname, c.custcity, c.workingarea as customerarea, c.custcountry, c.grade, c.openingamt, c.receiveamt, c.paymentamt, c.outstandingamt, c.phone as customerphone FROM customers c, agents a WHERE c.agentcode=a.agentcode ORDER BY a.agentname", nativeQuery = true)
     List<Object[]> agentsWithCustomers();
 }
