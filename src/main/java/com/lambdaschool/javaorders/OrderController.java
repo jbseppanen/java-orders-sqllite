@@ -83,6 +83,10 @@ public class OrderController {
     public Customers deleteCustomer(@PathVariable long custcode) {
         var customerToDelete = custRepo.findById(custcode);
         if (customerToDelete.isPresent()) {
+            List<Orders> ordersFromCustomer = orderRepo.findByCustomers_Custcode(custcode);
+            for (Orders order : ordersFromCustomer) {
+                orderRepo.deleteById(order.getOrdnum());
+            }
             custRepo.deleteById(custcode);
             return customerToDelete.get();
         } else {
@@ -135,12 +139,19 @@ public class OrderController {
     }
 
     @DeleteMapping("/agents/agentcode/{agentcode}")
-    public void deleteAgent(@PathVariable long agentcode) {
-        var agent = agentRepo.findById(agentcode);
-        if (agent.isPresent()) {
-//            if (agent.get().getCustomers().size()==0 || agent.get().getOrders().size()==0) {
+    public Agents deleteAgent(@PathVariable long agentcode) {
+        var agentToDelete = agentRepo.findById(agentcode);
+        if (agentToDelete.isPresent()) {
+            int custSize = custRepo.findByAgentcode_Agentcode(agentcode).size();
+            int ordersSize = orderRepo.findByAgentcode_Agentcode(agentcode).size();
+            if (custSize == 0 && ordersSize == 0) {
                 agentRepo.deleteById(agentcode);
-//            }
+                return agentToDelete.get();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
         }
     }
 

@@ -29,5 +29,4 @@ public class Customers {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customers")
     private Set<Orders> orders;
-
 }

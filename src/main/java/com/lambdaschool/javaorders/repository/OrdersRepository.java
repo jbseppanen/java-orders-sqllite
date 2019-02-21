@@ -11,6 +11,8 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
     List<Orders> findByCustomers_Custcode(long custcode);
 
+    List<Orders> findByAgentcode_Agentcode(long agentcode);
+
     @Query(value = "SELECT c.custname as Name , o.ordnum as Number, o.ordamount, o.advanceamount, o.agentcode, o.orddescription as Description FROM customers c, orders o WHERE c.custcode=o.custcode ORDER BY c.custname", nativeQuery = true)
     List<Object[]> customersWithOrders();
 
