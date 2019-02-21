@@ -62,7 +62,7 @@ public class SQLiteDialect extends Dialect
         return "select last_insert_rowid()";
     }
 
-    public boolean supportsLimit()
+/*    public boolean supportsLimit()
     {
         return true;
     }
@@ -73,7 +73,7 @@ public class SQLiteDialect extends Dialect
                 append(query).
                 append(hasOffset ? " limit ? offset ?" : " limit ?").
                 toString();
-    }
+    }*/
 
     public boolean supportsTemporaryTables()
     {
