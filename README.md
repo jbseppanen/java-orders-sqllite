@@ -58,21 +58,21 @@ The table layouts are as follows
 
 Expose the following end points
 
-* GET /customers - returns all the customers
-* GET /orders - return all the orders
-* GET /agents - return all the agents
+* GET /customers - returns all the customers*
+* GET /orders - return all the orders*
+* GET /agents - return all the agents*
 
-* GET /customers/custcode/{custcode}
-* GET /orders/ordnum/{ordnum}
-* GET /agents/agentcode/{agentcode}
+* GET /customers/custcode/{custcode}*
+* GET /orders/ordnum/{ordnum}*
+* GET /agents/agentcode/{agentcode}*
 
-* POST /customers - adds a customers
-* POST /orders - adds an order
-* POST /agents - adds an agent
+* POST /customers - adds a customers*
+* POST /orders - adds an order*
+* POST /agents - adds an agent*
 
-* PUT /customers/custocode/{custcode} - updates a customers based on custcode
-* PUT /orders/ordnum/{ordnum} - updates an order based on ordnum
-* PUT /agents/agentcode/{agentcode} - updates an agent based on ordnum
+* PUT /customers/custocode/{custcode} - updates a customers based on custcode*
+* PUT /orders/ordnum/{ordnum} - updates an order based on ordnum*
+* PUT /agents/agentcode/{agentcode} - updates an agent based on ordnum* (This must be agentcode, not ordnum)
 
 * DELETE /customers/custcode/{custcode} - Deletes a customers based off of their custcode and deletes all their associated orders
 * DELETE /orders/ordnum/{ordnum} - deletes an order based off its ordnum

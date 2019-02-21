@@ -1,6 +1,8 @@
 package com.lambdaschool.javaorders.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,14 +22,18 @@ public class Customers {
     private String custcity, workingarea, custcountry, grade, phone;
     private double openingamt, receiveamt, paymentamt, outstandingamt;
 
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "agentcode", nullable = false)
-    @JsonIgnore
     private Agents agent;
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customers")
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customers")
     private Set<Orders> orders;
+
+//    @ManyToOne(targetEntity = Agents.class)
+//    @JoinColumn(name = "agentcode")
+//    private long agentcode;
 
     public Customers() {
     }

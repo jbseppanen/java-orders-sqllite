@@ -1,6 +1,8 @@
 package com.lambdaschool.javaorders;
 
+import com.lambdaschool.javaorders.models.Customers;
 import com.lambdaschool.javaorders.models.Orders;
+import com.lambdaschool.javaorders.models.Agents;
 import com.lambdaschool.javaorders.repository.AgentsRepository;
 import com.lambdaschool.javaorders.repository.CustomersRepository;
 import com.lambdaschool.javaorders.repository.OrdersRepository;
@@ -8,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = {}, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,6 +27,24 @@ public class OrderController {
 
     @Autowired
     OrdersRepository orderRepo;
+
+
+    // ------------Customers Mapping------------
+
+    @GetMapping("/customers")
+    public List<Customers> allCustomers() {
+        return custRepo.findAll();
+    }
+
+    @GetMapping("/customers/custcode/{custcode}")
+    public Customers getCustomerByCustcode(@PathVariable long custcode) {
+        Optional<Customers> customersById = custRepo.findById(custcode);
+        if (customersById.isPresent()) {
+            return customersById.get();
+        } else {
+            return null;
+        }
+    }
 
     @GetMapping("/customer/order")
     public List<Object[]> allCustomersWithOrders() {
@@ -38,8 +61,53 @@ public class OrderController {
         return orderRepo.findByCustomers_Custcode(custcode);
     }
 
+    @PostMapping("/customers")
+    public Customers newCustomer(@RequestBody Customers newCustomer) throws URISyntaxException {
+        return custRepo.save(newCustomer);
+    }
+
+    @PutMapping("/customers/custcode/{custcode}")
+    public Customers updateCustomer(@RequestBody Customers customerToUpdate, @PathVariable long custcode) throws URISyntaxException {
+        Optional<Customers> foundCustomer = custRepo.findById(custcode);
+        if (foundCustomer.isPresent()) {
+            customerToUpdate.setCustcode(custcode);
+            custRepo.save(customerToUpdate);
+            return customerToUpdate;
+        } else {
+            return null;
+        }
+    }
+
+    @DeleteMapping("/customers/custcode/{custcode}")
+    public void deleteCustomer(@PathVariable long custcode) {
+        Optional<Customers> customer = custRepo.findById(custcode);
+        if (customer.isPresent()) {
+            for(Orders order:customer.get().getOrders()) {
+                orderRepo.deleteById(order.getOrdnum());
+            }
+        }
+        custRepo.deleteById(custcode);
+    }
+
+    // ------------Agents Mapping------------
+
     @GetMapping("/agents")
-    public List<Object[]> allAgents() {
+    public List<Agents> allAgents() {
+        return agentRepo.findAll();
+    }
+
+    @GetMapping("/agents/agentcode/{agentcode}")
+    public Agents getAgentById(@PathVariable long agentcode) {
+        Optional<Agents> agentsById = agentRepo.findById(agentcode);
+        if (agentsById.isPresent()) {
+            return agentsById.get();
+        } else {
+            return null;
+        }
+    }
+
+    @GetMapping("/agents/customers")
+    public List<Object[]> allAgentsWithCustomers() {
         return agentRepo.agentsWithCustomers();
     }
 
@@ -48,18 +116,69 @@ public class OrderController {
         return orderRepo.ordersWithAgents();
     }
 
-    @DeleteMapping("/customer/{custcode}")
-    public void deleteCustomer(@PathVariable long custcode) {
-        custRepo.deleteById(custcode);
+    @PostMapping("/agents")
+    public Agents newAgent(@RequestBody Agents newAgent) throws URISyntaxException {
+        return agentRepo.save(newAgent);
     }
 
-/*    @GetMapping("/customers")
-    public List<Customers> allCustomers() {
-        return custRepo.findAll();
+    @PutMapping("/agents/agentcode/{agentcode}")
+    public Agents updateAgent(@RequestBody Agents agentToUpdate, @PathVariable long agentcode) throws URISyntaxException {
+        Optional<Agents> foundAgent = agentRepo.findById(agentcode);
+        if (foundAgent.isPresent()) {
+            agentToUpdate.setAgentcode(agentcode);
+            agentRepo.save(agentToUpdate);
+            return agentToUpdate;
+        } else {
+            return null;
+        }
     }
 
-    @GetMapping("orders")
+    @DeleteMapping("/agents/agentcode/{agentcode}")
+    public void deleteAgent(@PathVariable long agentcode) {
+        Optional<Agents> agent = agentRepo.findById(agentcode);
+        if (agent.isPresent()) {
+            if (agent.get().getCustomers().size()==0 || agent.get().getOrders().size()==0) {
+                agentRepo.deleteById(agentcode);
+            }
+        }
+    }
+
+    // ------------Orders Mapping------------
+
+    @GetMapping("/orders")
     public List<Orders> allOrders() {
-       return orderRepo.findAll();
-    }*/
+        return orderRepo.findAll();
+    }
+
+    @GetMapping("/orders/ordnum/{ordnum}")
+    public Orders getOrderById(@PathVariable long ordnum) {
+        Optional<Orders> ordersById = orderRepo.findById(ordnum);
+        if (ordersById.isPresent()) {
+            return ordersById.get();
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("/orders")
+    public Orders newOrder(@RequestBody Orders newOrder) throws URISyntaxException {
+        return orderRepo.save(newOrder);
+    }
+
+    @PutMapping("/orders/ordnum/{ordnum}")
+    public Orders updateOrder(@RequestBody Orders orderToUpdate, @PathVariable long ordnum) throws URISyntaxException {
+        Optional<Orders> foundOrder = orderRepo.findById(ordnum);
+        if (foundOrder.isPresent()) {
+            orderToUpdate.setOrdnum(ordnum);
+            orderRepo.save(orderToUpdate);
+            return orderToUpdate;
+        } else {
+            return null;
+        }
+    }
+
+    @DeleteMapping("/orders/ordnum/{ordnum}")
+    public void deleteOrder(@PathVariable long ordnum) {
+        orderRepo.deleteById(ordnum);
+    }
 }
