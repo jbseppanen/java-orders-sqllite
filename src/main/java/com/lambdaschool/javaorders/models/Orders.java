@@ -1,12 +1,11 @@
 package com.lambdaschool.javaorders.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+@Data @NoArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Orders {
@@ -21,13 +20,11 @@ public class Orders {
 //    @JsonIgnore
     private Customers customers;
 
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "agentcode", nullable = false)
-//    @JsonIgnore
-    private Agents agent;
+    private Agents agentcode;
 
     private String orddescription;
 
-    public Orders() {
-    }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,14 +80,14 @@ public class OrderController {
     }
 
     @DeleteMapping("/customers/custcode/{custcode}")
-    public void deleteCustomer(@PathVariable long custcode) {
-        Optional<Customers> customer = custRepo.findById(custcode);
-        if (customer.isPresent()) {
-            for(Orders order:customer.get().getOrders()) {
-                orderRepo.deleteById(order.getOrdnum());
-            }
+    public Customers deleteCustomer(@PathVariable long custcode) {
+        var customerToDelete = custRepo.findById(custcode);
+        if (customerToDelete.isPresent()) {
+            custRepo.deleteById(custcode);
+            return customerToDelete.get();
+        } else {
+            return null;
         }
-        custRepo.deleteById(custcode);
     }
 
     // ------------Agents Mapping------------
@@ -135,11 +136,11 @@ public class OrderController {
 
     @DeleteMapping("/agents/agentcode/{agentcode}")
     public void deleteAgent(@PathVariable long agentcode) {
-        Optional<Agents> agent = agentRepo.findById(agentcode);
+        var agent = agentRepo.findById(agentcode);
         if (agent.isPresent()) {
-            if (agent.get().getCustomers().size()==0 || agent.get().getOrders().size()==0) {
+//            if (agent.get().getCustomers().size()==0 || agent.get().getOrders().size()==0) {
                 agentRepo.deleteById(agentcode);
-            }
+//            }
         }
     }
 
@@ -167,7 +168,7 @@ public class OrderController {
 
     @PutMapping("/orders/ordnum/{ordnum}")
     public Orders updateOrder(@RequestBody Orders orderToUpdate, @PathVariable long ordnum) throws URISyntaxException {
-        Optional<Orders> foundOrder = orderRepo.findById(ordnum);
+        var foundOrder = orderRepo.findById(ordnum);
         if (foundOrder.isPresent()) {
             orderToUpdate.setOrdnum(ordnum);
             orderRepo.save(orderToUpdate);

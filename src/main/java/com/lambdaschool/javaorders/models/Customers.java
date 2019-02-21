@@ -1,14 +1,13 @@
 package com.lambdaschool.javaorders.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Data @NoArgsConstructor
 @Entity
 @Table(name = "customers")
 public class Customers {
@@ -25,16 +24,10 @@ public class Customers {
 //    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "agentcode", nullable = false)
-    private Agents agent;
+    private Agents agentcode;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "customers")
     private Set<Orders> orders;
 
-//    @ManyToOne(targetEntity = Agents.class)
-//    @JoinColumn(name = "agentcode")
-//    private long agentcode;
-
-    public Customers() {
-    }
 }
